@@ -17,16 +17,17 @@ app.get("/api/rss/cat/:category", async (req, res) => {
   }
 });
 
-// Next game proxy
-app.get("/api/next-game", async (req, res) => {
+// One route handles ALL scraper endpoints
+app.get("/api/scraper/*", async (req, res) => {
+  const path = req.params[0]; // everything after /api/scraper/
   try {
-    const response = await fetch("https://barca-scraper-7tag.onrender.com/next-game");
+    const response = await fetch(`${SCRAPER}/${path}`);
     const data = await response.json();
     res.json(data);
   } catch (err) {
-    res.status(500).send("Error fetching next game");
+    res.status(500).send("Error fetching scraper");
   }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => console.log(`Proxy running on port ${PORT}`));
