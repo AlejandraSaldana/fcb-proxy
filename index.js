@@ -1,22 +1,27 @@
 import express from "express";
 import cors from "cors";
+import cloudscraper from "cloudscraper";
 
 const app = express();
+
 app.use(cors({
-  origin: "*" // allows any frontend to call it
+  origin: "*"
 }));
 
 const SCRAPER = "https://barca-scraper-7tag.onrender.com";
 
-// RSS proxy
 app.get("/api/rss/cat/:category", async (req, res) => {
   const { category } = req.params;
+
   try {
-    const response = await fetch(`https://carpetasfcb.com/rss/cat/${category}`);
-    const xml = await response.text();
+    const url = `https://carpetasfcb.com/rss/cat/${category}`;
+
+    const response = await cloudscraper.get(url);
+
     res.set("Content-Type", "application/xml");
-    res.send(xml);
+    res.send(response);
   } catch (err) {
+    console.error(err);
     res.status(500).send("Error fetching RSS");
   }
 });
