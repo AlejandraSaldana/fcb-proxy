@@ -6,6 +6,8 @@ app.use(cors({
   origin: "*" // allows any frontend to call it
 }));
 
+const SCRAPER = "https://barca-scraper-7tag.onrender.com";
+
 // RSS proxy
 app.get("/api/rss/cat/:category", async (req, res) => {
   const { category } = req.params;
